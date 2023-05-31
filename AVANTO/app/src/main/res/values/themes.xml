@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.AVANTO" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/app_selected</item>
+        <item name="colorPrimaryVariant">@color/app_foreground</item>
+        <item name="colorOnPrimary">@color/app_unselected</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/app_selected</item>
+        <item name="colorSecondaryVariant">@color/app_selected</item>
+        <item name="colorOnSecondary">@color/app_foreground</item>
+        <!-- Background brand color. -->
+        <item name="android:windowBackground">@color/app_background</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorOnSecondary</item>
+        <item name="android:navigationBarColor">?attr/colorOnSecondary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/app_unselected</item>
+    </style>
+</resources>

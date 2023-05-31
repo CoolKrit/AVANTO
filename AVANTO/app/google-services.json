@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693822138464",
+    "project_id": "signin-signup-firebase-3fa1e",
+    "storage_bucket": "signin-signup-firebase-3fa1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693822138464:android:bbb73ab024a640e192bb05",
+        "android_client_info": {
+          "package_name": "com.example.avanto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDArZImWjsn2vwOM8tzgh2ZsxLJfK7_Z6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

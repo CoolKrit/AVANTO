@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">AVANTO</string>
+
+    <!-- Sign In -->
+    <string name="signin">Sign In</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="no_account">No account? Sign Up</string>
+
+    <!-- Sign -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <!-- Sign Up -->
+    <string name="signup">Sign Up</string>
+    <string name="username">Name</string>
+    <string name="have_an_account">Have an account? Sign In</string>
+
+    <!-- Home -->
+    <string name="home">Home</string>
+    <string name="music">Music</string>
+    <string name="video">Video</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- User -->
+    <string name="profile">Profile</string>
+    <string name="user">User</string>
+    <string name="phone_number">Phone Number</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
