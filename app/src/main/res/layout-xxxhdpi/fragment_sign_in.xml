@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
 
             android:inputType="textEmailAddress"
-            android:textColor="@color/app_unselected"/>
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Поле ввода (Пароль) -->
@@ -109,7 +109,7 @@
         android:id="@+id/signin_button"
         android:layout_width="260dp"
         android:layout_height="52dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
 
         app:cornerRadius="15dp"
         android:text="@string/signin"

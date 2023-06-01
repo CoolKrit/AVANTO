@@ -30,7 +30,7 @@
         android:layout_marginTop="30dp">
 
         <TextView
-            android:id="@+id/userNameTitle"
+            android:id="@+id/user_titleName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user"
@@ -39,49 +39,49 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textUserName"
+            android:id="@+id/user_textName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/userNameTitle" />
+            app:layout_constraintTop_toTopOf="@+id/user_titleName" />
 
         <TextView
-            android:id="@+id/emailTitle"
+            android:id="@+id/user_titleEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:text="@string/email"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userNameTitle" />
+            app:layout_constraintTop_toBottomOf="@id/user_titleName" />
 
         <TextView
-            android:id="@+id/textUserEmail"
+            android:id="@+id/user_textEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/emailTitle" />
+            app:layout_constraintTop_toTopOf="@id/user_titleEmail" />
 
         <TextView
-            android:id="@+id/phoneTitle"
+            android:id="@+id/user_titlePhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:text="@string/phone_number"
-            android:textSize="15sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailTitle" />
+            app:layout_constraintTop_toBottomOf="@id/user_titleEmail" />
 
         <TextView
-            android:id="@+id/textUserPhone"
+            android:id="@+id/user_textPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/phoneTitle" />
+            app:layout_constraintTop_toTopOf="@id/user_titlePhone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -43,7 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Поле ввода (Номер телефона) -->
@@ -69,7 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Поле ввода (Почта) -->
@@ -95,7 +97,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Поле ввода (Пароль) -->
@@ -122,7 +125,8 @@
             android:layout_height="wrap_content"
 
             android:inputType="textPassword"
-            android:maxLength="25" />
+            android:maxLength="25"
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Кнопка (Вход) -->

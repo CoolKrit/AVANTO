@@ -30,7 +30,7 @@ public class UserFragment extends Fragment {
 
     FragmentUserBinding binding;
     FirebaseAuth mAuth;
-    TextView textUserName, textUserEmail, textUserPhone;
+    TextView userTextName, userTextEmail, userTextPhone;
     String userName, userEmail, userPhone;
 
     @Override
@@ -43,9 +43,9 @@ public class UserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        textUserName = binding.textUserName;
-        textUserEmail = binding.textUserEmail;
-        textUserPhone = binding.textUserPhone;
+        userTextName = binding.userTextName;
+        userTextEmail = binding.userTextEmail;
+        userTextPhone = binding.userTextPhone;
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -68,9 +68,9 @@ public class UserFragment extends Fragment {
                     userEmail = firebaseUser.getEmail();
                     userPhone = readWriteUserDetails.getUserPhone();
 
-                    textUserName.setText(userName);
-                    textUserEmail.setText(userEmail);
-                    textUserPhone.setText(userPhone);
+                    userTextName.setText(userName);
+                    userTextEmail.setText(userEmail);
+                    userTextPhone.setText(userPhone);
                 }
             }
 
