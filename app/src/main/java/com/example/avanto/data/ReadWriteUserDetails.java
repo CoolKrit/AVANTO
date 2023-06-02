@@ -1,13 +1,22 @@
 package com.example.avanto.data;
 
 public class ReadWriteUserDetails {
-    public String userPhone;
+    public String userName, userPhone;
 
-    public ReadWriteUserDetails(String userPhone) {
+    public ReadWriteUserDetails(String userName, String userPhone) {
+        this.userName = userName;
         this.userPhone = userPhone;
     }
 
     public ReadWriteUserDetails() {
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserPhone() {

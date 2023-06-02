@@ -33,10 +33,10 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
 
-    FragmentHomeBinding binding;
-    FirebaseAuth mAuth;
-    TextView homeTextGreetings;
-    String homeGreetings;
+    private FragmentHomeBinding binding;
+    private FirebaseAuth mAuth;
+    private TextView homeTextGreetings;
+    private String homeGreetings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,14 +60,14 @@ public class HomeFragment extends Fragment {
     private void showHomeGreetings(FirebaseUser firebaseUser) {
         String userID = firebaseUser.getUid();
 
-        // Получение пользовательской информации из Database "Registered Users"
+        // Получение пользовательской информации из Database "Users"
         DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Users");
         referenceProfile.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ReadWriteUserDetails readWriteUserDetails = snapshot.getValue(ReadWriteUserDetails.class);
                 if (readWriteUserDetails != null) {
-                    homeGreetings = firebaseUser.getDisplayName();
+                    homeGreetings = readWriteUserDetails.getUserName();
 
                     homeTextGreetings.setText("Welcome, " + homeGreetings);
                 }

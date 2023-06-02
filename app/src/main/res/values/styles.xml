@@ -4,7 +4,6 @@
     <style name="AVANTO">
         <item name="android:textSize">48sp</item>
         <item name="android:letterSpacing">0.25</item>
-        <item name="android:textColor">@color/app_unselected</item>
         <item name="android:fontFamily">@font/sticknobills_semibold</item>
     </style>
 
@@ -19,7 +18,7 @@
 
         <item name="startIconTint">?attr/colorOnPrimary</item>
         <item name="endIconTint">?attr/colorOnPrimary</item>
-        <item name="android:textColorHint">?attr/colorOnPrimary</item>
+        <item name="android:textColorHint">@color/app_hint</item>
         <item name="hintTextColor">?attr/colorPrimary</item>
     </style>
 </resources>

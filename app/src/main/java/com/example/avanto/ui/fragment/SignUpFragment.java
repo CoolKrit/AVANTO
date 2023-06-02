@@ -23,30 +23,24 @@ import android.widget.Toast;
 
 import com.example.avanto.R;
 import com.example.avanto.data.ReadWriteUserDetails;
-import com.example.avanto.databinding.FragmentSignInBinding;
 import com.example.avanto.databinding.FragmentSignUpBinding;
-import com.example.avanto.ui.activity.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SignUpFragment extends Fragment {
 
-    FragmentSignUpBinding binding;
-    EditText signUpUserName, signUpUserPhone, signUpUserEmail, signUpUserPassword;
-    Button signUpButton;
-    TextView toSignInText;
-
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
-    FirebaseDatabase database;
-    DatabaseReference reference;
+    private FragmentSignUpBinding binding;
+    private EditText signUpUserName, signUpUserPhone, signUpUserEmail, signUpUserPassword;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,10 +54,10 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         signUpUserName = binding.signupUserInputEditField;
         signUpUserPhone = binding.signupPhoneInputEditField;
-        signUpUserEmail = binding.signupEmailInputEditField;
-        signUpUserPassword = binding.signupPasswordInputEditField;
-        signUpButton = binding.signupButton;
-        toSignInText = binding.signupToSigninText;
+        signUpUserEmail = binding.signupUserEmailInputEditField;
+        signUpUserPassword = binding.signupUserPasswordInputEditField;
+        Button signUpButton = binding.signupButton;
+        TextView toSignInText = binding.signupToSignInText;
 
         // Изменение цвета в тексте только определённого слова
         SpannableString spannableString = new SpannableString(toSignInText.getText().toString());
@@ -85,19 +79,16 @@ public class SignUpFragment extends Fragment {
                 String userPassword = signUpUserPassword.getText().toString();
 
                 if (TextUtils.isEmpty(userName)) {
-                    signUpUserName.setError("User Name cannot be empty!");
-                }
-                else if (TextUtils.isEmpty(userPhone)) {
-                    signUpUserPhone.setError("User Phone cannot be empty!");
+                    signUpUserName.setError("Name field cannot be empty!");
                 }
                 else if (TextUtils.isEmpty(userEmail)) {
-                    signUpUserEmail.setError("User Email cannot be empty!");
+                    signUpUserEmail.setError("Email field cannot be empty!");
                 }
                 else if (TextUtils.isEmpty(userPassword)) {
-                    signUpUserPassword.setError("User Password cannot be empty!");
+                    signUpUserPassword.setError("Password field cannot be empty!");
                 }
                 else {
-                    signIn(userName, userPhone, userEmail, userPassword);
+                    signUp(userName, userPhone, userEmail, userPassword);
                 }
             }
         });
@@ -110,7 +101,7 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    private void signIn(String userName, String userPhone, String email, String password) {
+    private void signUp(String userName, String userPhone, String email, String password) {
         mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -119,13 +110,9 @@ public class SignUpFragment extends Fragment {
                         if (task.isSuccessful()) {
                             currentUser = mAuth.getCurrentUser();
 
-                            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(userName).build();
-                            currentUser.updateProfile(profileChangeRequest);
-
                             // Ввод пользовательских данных в Firebase Realtime Database
-                            ReadWriteUserDetails readWriteUserDetails = new ReadWriteUserDetails(userPhone);
+                            ReadWriteUserDetails readWriteUserDetails = new ReadWriteUserDetails(userName, userPhone);
                             reference.child(currentUser.getUid()).setValue(readWriteUserDetails);
-
                             Toast.makeText(getContext(), "You have signup successfully!", Toast.LENGTH_SHORT).show();
                             Navigation.findNavController(getView()).navigate(R.id.action_signUpFragment_to_signInFragment);
                         } else {
