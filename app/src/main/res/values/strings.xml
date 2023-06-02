@@ -14,6 +14,7 @@
     <!-- Sign Up -->
     <string name="signup">Sign Up</string>
     <string name="username">Name</string>
+    <string name="phone_number">Phone number</string>
     <string name="have_an_account">Have an account? Sign In</string>
 
     <!-- Home -->
@@ -24,8 +25,16 @@
 
     <!-- User -->
     <string name="profile">Profile</string>
-    <string name="user">User</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="pr_user">User:</string>
+    <string name="pr_email">Email:</string>
+    <string name="pr_phone_number">Phone number:</string>
+    <string name="about_theapp">About the app</string>
+    <string name="signout">Sign Out</string>
+
+    <!-- Forgot Password -->
+    <string name="enter_email">Enter your Email</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset">Reset</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

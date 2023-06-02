@@ -1,26 +1,45 @@
 {
   "project_info": {
-    "project_number": "693822138464",
-    "project_id": "signin-signup-firebase-3fa1e",
-    "storage_bucket": "signin-signup-firebase-3fa1e.appspot.com"
+    "project_number": "209782692014",
+    "firebase_url": "https://avanto-app-default-rtdb.firebaseio.com",
+    "project_id": "avanto-app",
+    "storage_bucket": "avanto-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:693822138464:android:bbb73ab024a640e192bb05",
+        "mobilesdk_app_id": "1:209782692014:android:81cb5555972f119322b53f",
         "android_client_info": {
           "package_name": "com.example.avanto"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "209782692014-320esdeo8gn0166eaf1qksmv9m6usdv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.avanto",
+            "certificate_hash": "3a74c5e8fbaab751b4751a77a8e36e29ebe8a491"
+          }
+        },
+        {
+          "client_id": "209782692014-1kb8b2ug3u61r5b93iesdbb55j8ovh29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDArZImWjsn2vwOM8tzgh2ZsxLJfK7_Z6U"
+          "current_key": "AIzaSyC8Yfyy352o53kcdKnzYTW4xtloXoJ6qgg"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209782692014-1kb8b2ug3u61r5b93iesdbb55j8ovh29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

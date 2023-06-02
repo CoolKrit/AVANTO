@@ -22,7 +22,7 @@
 
     <!-- Поле ввода (Пользователь) -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_user_input_field"
+        android:id="@+id/signup_userInputField"
         style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,16 +39,43 @@
         app:startIconDrawable="@drawable/ic_user">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_user_input_edit_field"
+            android:id="@+id/signup_userInputEditField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/app_unselected" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Поле ввода (Номер телефона) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/signup_userPhoneInputField"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+
+        android:hint="@string/phone_number"
+
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_userInputField"
+        app:startIconDrawable="@drawable/ic_phone">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_phoneInputEditField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Поле ввода (Почта) -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_email_input_field"
+        android:id="@+id/signup_userEmailInputField"
         style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,20 +88,21 @@
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_user_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/signup_userPhoneInputField"
         app:startIconDrawable="@drawable/ic_email">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_email_input_edit_field"
+            android:id="@+id/signup_userEmailInputEditField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Поле ввода (Пароль) -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signup_password_input_field"
+        android:id="@+id/signup_userPasswordInputField"
         style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,16 +115,17 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_email_input_field"
+        app:layout_constraintTop_toBottomOf="@+id/signup_userEmailInputField"
         app:startIconDrawable="@drawable/ic_password">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signup_password_input_edit_field"
+            android:id="@+id/signup_userPasswordInputEditField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:inputType="textPassword"
-            android:maxLength="25" />
+            android:maxLength="25"
+            android:textColor="@color/app_unselected" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Кнопка (Вход) -->
@@ -111,11 +140,11 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_password_input_field" />
+        app:layout_constraintTop_toBottomOf="@+id/signup_userPasswordInputField" />
 
     <!-- Текст (Нет аккаунта) -->
     <TextView
-        android:id="@+id/signup_to_signin_text"
+        android:id="@+id/signup_toSignInText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
