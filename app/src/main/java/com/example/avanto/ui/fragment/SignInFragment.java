@@ -1,13 +1,16 @@
 package com.example.avanto.ui.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +89,51 @@ public class SignInFragment extends Fragment {
             } else {
                 Toast.makeText(getContext(), "SignIn failed.", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        authViewModel.getResetPasswordSuccessLiveData().observe(getViewLifecycleOwner(), success -> {
+            if (success) {
+                Toast.makeText(getActivity(), "Check your email", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Unable to send, failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        forgotPassword.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot_password, null);
+            EditText emailBox = dialogView.findViewById(R.id.dialog_emailBox);
+
+            builder.setView(dialogView);
+            AlertDialog dialog = builder.create();
+
+            dialogView.findViewById(R.id.dialog_buttonReset).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String userEmail = emailBox.getText().toString();
+
+                    if (TextUtils.isEmpty(userEmail) || !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
+                        emailBox.setError("Enter a valid email");
+                        return;
+                    }
+
+                    authViewModel.resetPassword(userEmail);
+                    dialog.dismiss();
+                }
+            });
+
+            dialogView.findViewById(R.id.dialog_buttonCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+
+            dialog.show();
         });
 
         // Обработка нажатия кнопки входа в аккаунт

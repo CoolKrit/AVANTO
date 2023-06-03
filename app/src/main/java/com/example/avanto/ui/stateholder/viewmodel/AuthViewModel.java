@@ -13,6 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AuthViewModel extends ViewModel {
     private MutableLiveData<Boolean> signInSuccessLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> signUpSuccessLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> resetPasswordSuccessLiveData = new MutableLiveData<>();
+
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
 
@@ -27,6 +29,10 @@ public class AuthViewModel extends ViewModel {
 
     public LiveData<Boolean> getSignUpSuccessLiveData() {
         return signUpSuccessLiveData;
+    }
+
+    public LiveData<Boolean> getResetPasswordSuccessLiveData() {
+        return resetPasswordSuccessLiveData;
     }
 
     public void signIn(String email, String password) {
@@ -50,6 +56,17 @@ public class AuthViewModel extends ViewModel {
                         signUpSuccessLiveData.setValue(true);
                     } else {
                         signUpSuccessLiveData.setValue(false);
+                    }
+                });
+    }
+
+    public void resetPassword(String email) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        resetPasswordSuccessLiveData.setValue(true);
+                    } else {
+                        resetPasswordSuccessLiveData.setValue(false);
                     }
                 });
     }
