@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private FirebaseAuth mAuth;
     private TextView homeTextGreetings;
     private String homeGreetings;
 
@@ -42,7 +41,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         homeTextGreetings = binding.homeTextGreetings;
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             showHomeGreetings(currentUser);

@@ -1,7 +1,5 @@
 package com.example.avanto.ui.stateholder.viewmodel;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,8 +14,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserViewModel extends ViewModel {
 
-    private MutableLiveData<User> userLiveData;
-    private DatabaseReference userReference;
+    private final MutableLiveData<User> userLiveData;
+    private final DatabaseReference userReference;
 
     public UserViewModel() {
         userLiveData = new MutableLiveData<>();
@@ -39,6 +37,7 @@ public class UserViewModel extends ViewModel {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Обработка ошибок
+                userLiveData.setValue(null);
             }
         });
     }
