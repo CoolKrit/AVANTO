@@ -11,11 +11,13 @@ public class User {
         this.userPhoneNumber = phonenumber;
     }
 
-    public void setUsername(String username) {
+    public User() {}
+
+    public void setUserName(String username) {
         this.userName = username;
     }
 
-    public void setEmail(String email) {
+    public void setUserEmail(String email) {
         this.userEmail = email;
     }
 
