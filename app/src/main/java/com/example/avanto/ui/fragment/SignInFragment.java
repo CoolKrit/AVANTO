@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.avanto.R;
+import com.example.avanto.databinding.DialogForgotPasswordBinding;
 import com.example.avanto.databinding.FragmentSignInBinding;
 import com.example.avanto.ui.stateholder.viewmodel.AuthViewModel;
 import com.example.avanto.ui.activity.HomeActivity;
@@ -37,6 +38,7 @@ public class SignInFragment extends Fragment {
     private static final String FILE_EMAIL = "rememberMe";
     private AuthViewModel authViewModel;
     private FragmentSignInBinding binding;
+    private DialogForgotPasswordBinding bindingForgotPassword;
     TextView forgotPassword;
     private EditText signInUserEmail, signInUserPassword;
     private CheckBox checkBox;
@@ -101,13 +103,13 @@ public class SignInFragment extends Fragment {
 
         forgotPassword.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot_password, null);
-            EditText emailBox = dialogView.findViewById(R.id.dialog_emailBox);
+            bindingForgotPassword = DialogForgotPasswordBinding.inflate(getLayoutInflater());
+            EditText emailBox = bindingForgotPassword.dialogEmailBox;
 
-            builder.setView(dialogView);
+            builder.setView(bindingForgotPassword.getRoot());
             AlertDialog dialog = builder.create();
 
-            dialogView.findViewById(R.id.dialog_buttonReset).setOnClickListener(new View.OnClickListener() {
+            bindingForgotPassword.dialogButtonReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String userEmail = emailBox.getText().toString();
@@ -122,7 +124,7 @@ public class SignInFragment extends Fragment {
                 }
             });
 
-            dialogView.findViewById(R.id.dialog_buttonCancel).setOnClickListener(new View.OnClickListener() {
+            bindingForgotPassword.dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();

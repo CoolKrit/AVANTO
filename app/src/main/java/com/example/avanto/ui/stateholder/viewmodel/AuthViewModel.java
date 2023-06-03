@@ -11,12 +11,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AuthViewModel extends ViewModel {
-    private MutableLiveData<Boolean> signInSuccessLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> signUpSuccessLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> resetPasswordSuccessLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> signInSuccessLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> signUpSuccessLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> resetPasswordSuccessLiveData = new MutableLiveData<>();
 
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase;
+    private final FirebaseAuth mAuth;
+    private final FirebaseDatabase mDatabase;
 
     public AuthViewModel() {
         mAuth = FirebaseAuth.getInstance();
