@@ -1,14 +1,16 @@
 package com.example.avanto.data.model;
 
-public class Audio {
+public class Music {
     private int img;
     private String title;
-    private String filePath;
+    private String artist;
     private int duration;
+    private String filePath;
 
-    public Audio(int img, String title, String filePath, int duration) {
+    public Music(int img, String title, String artist, String filePath, int duration) {
         this.img = img;
         this.title = title;
+        this.artist = artist;
         this.filePath = filePath;
         this.duration = duration;
     }
@@ -27,6 +29,14 @@ public class Audio {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 
     public String getFilePath() {
