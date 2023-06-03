@@ -6,9 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.avanto.R;
-import com.example.avanto.data.ReadWriteUserDetails;
-import com.example.avanto.databinding.FragmentSignInBinding;
+import com.example.avanto.data.model.User;
 import com.example.avanto.databinding.FragmentUserBinding;
-import com.example.avanto.ui.activity.HomeActivity;
 import com.example.avanto.ui.activity.SignActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -77,11 +72,11 @@ public class UserFragment extends Fragment {
         referenceProfile.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ReadWriteUserDetails readWriteUserDetails = snapshot.getValue(ReadWriteUserDetails.class);
-                if (readWriteUserDetails != null) {
-                    userName = readWriteUserDetails.getUserName();
+                User userDetails = snapshot.getValue(User.class);
+                if (userDetails != null) {
+                    userName = userDetails.getUserName();
                     userEmail = firebaseUser.getEmail();
-                    userPhone = readWriteUserDetails.getUserPhone();
+                    userPhone = userDetails.getUserPhoneNumber();
 
                     userTextName.setText(userName);
                     userTextEmail.setText(userEmail);

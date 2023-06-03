@@ -1,27 +1,19 @@
 package com.example.avanto.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.avanto.R;
-import com.example.avanto.data.ReadWriteUserDetails;
+import com.example.avanto.data.model.User;
 import com.example.avanto.databinding.FragmentHomeBinding;
-import com.example.avanto.databinding.FragmentSignUpBinding;
-import com.example.avanto.ui.activity.SignActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -65,9 +57,9 @@ public class HomeFragment extends Fragment {
         referenceProfile.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ReadWriteUserDetails readWriteUserDetails = snapshot.getValue(ReadWriteUserDetails.class);
-                if (readWriteUserDetails != null) {
-                    homeGreetings = readWriteUserDetails.getUserName();
+                User userDetails = snapshot.getValue(User.class);
+                if (userDetails != null) {
+                    homeGreetings = userDetails.getUserName();
 
                     homeTextGreetings.setText("Welcome, " + homeGreetings);
                 }
