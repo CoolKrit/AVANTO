@@ -29,24 +29,20 @@ public class HomeActivity extends AppCompatActivity {
     ActivityResultLauncher<String[]> mPermissionResultLauncher;
     private boolean isReadPermissionGranted;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+        setContentView(binding.getRoot());
 
-        mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-            @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-            @Override
-            public void onActivityResult(Map<String, Boolean> result) {
-                if (result.get(Manifest.permission.READ_MEDIA_AUDIO) != null) {
-                    isReadPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_AUDIO));
-                }
-            }
+        mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            isReadPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_AUDIO));
         });
 
-        requestPermission();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermission();
+        }
     }
 
     @Override
@@ -60,12 +56,9 @@ public class HomeActivity extends AppCompatActivity {
     private void requestPermission() {
         isReadPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
 
-        List<String> permissionRequest = new ArrayList<>();
         if (!isReadPermissionGranted) {
+            List<String> permissionRequest = new ArrayList<>();
             permissionRequest.add(Manifest.permission.READ_MEDIA_AUDIO);
-        }
-
-        if (!permissionRequest.isEmpty()) {
             mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
         }
     }
