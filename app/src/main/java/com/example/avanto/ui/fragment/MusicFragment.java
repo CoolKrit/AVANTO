@@ -159,10 +159,13 @@ public class MusicFragment extends Fragment {
             return;
         }
 
+        musicList.clear();
         musicList.addAll(musics);
-        musicAdapter = new MusicAdapter(musicList);
-        recyclerView.setAdapter(musicAdapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        musicAdapter = new MusicAdapter(musics);
+        recyclerView.setAdapter(musicAdapter);
     }
 
     @Override
@@ -180,7 +183,7 @@ public class MusicFragment extends Fragment {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    filterMusicList(newText);
+                    filterMusicList(newText.toLowerCase());
                     return true;
                 }
             });
@@ -193,12 +196,12 @@ public class MusicFragment extends Fragment {
         List<Music> filteredList = new ArrayList<>();
 
         for (Music music : musicList) {
-            if (music.getTitle().toLowerCase().contains(query.toLowerCase()) || music.getArtist().toLowerCase().contains(query.toLowerCase())) {
+            if (music.getTitle().toLowerCase().contains(query) || music.getArtist().toLowerCase().contains(query)) {
                 filteredList.add(music);
             }
         }
-
-        musicAdapter.filterMusicList(filteredList);
+        if (musicAdapter != null)
+            musicAdapter.filterMusicList(filteredList);
     }
 
     @Override
