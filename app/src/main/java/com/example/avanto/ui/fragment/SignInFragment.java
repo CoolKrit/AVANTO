@@ -39,8 +39,6 @@ public class SignInFragment extends Fragment {
     private AuthViewModel authViewModel;
     private FragmentSignInBinding binding;
     private DialogForgotPasswordBinding bindingForgotPassword;
-    TextView forgotPassword;
-    private EditText signInUserEmail, signInUserPassword;
     private CheckBox checkBox;
 
     @Override
@@ -59,23 +57,22 @@ public class SignInFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        signInUserEmail = binding.signinEmailInputEditField;
-        signInUserPassword = binding.signinPasswordInputEditField;
-        checkBox = (CheckBox) binding.rememberMeCheckbox;
-        forgotPassword = binding.forgotPasswordText;
+
+        EditText signInUserEmail = binding.signinEmailInputEditField;
+        EditText signInUserPassword = binding.signinPasswordInputEditField;
+        checkBox = binding.rememberMeCheckbox;
+        TextView forgotPassword = binding.forgotPasswordText;
         Button signInButton = binding.signinButton;
         TextView toSignUpText = binding.signinToSignupText;
 
-        // Сохранение email и password
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences(FILE_EMAIL, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String saveEmail = sharedPreferences.getString("saveEmail", "");
         String savePassword = sharedPreferences.getString("savePassword", "");
         checkBox.setChecked(sharedPreferences.contains("checked") && sharedPreferences.getBoolean("checked", false));
-        binding.signinEmailInputEditField.setText(saveEmail);
-        binding.signinPasswordInputEditField.setText(savePassword);
+        signInUserEmail.setText(saveEmail);
+        signInUserPassword.setText(savePassword);
 
-        // Изменение цвета в тексте только определённого слова
         SpannableString spannableString = new SpannableString(toSignUpText.getText().toString());
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.app_selected));
         int start = spannableString.toString().indexOf("Sign Up");
@@ -109,27 +106,19 @@ public class SignInFragment extends Fragment {
             builder.setView(bindingForgotPassword.getRoot());
             AlertDialog dialog = builder.create();
 
-            bindingForgotPassword.dialogButtonReset.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String userEmail = emailBox.getText().toString();
+            bindingForgotPassword.dialogButtonReset.setOnClickListener(v1 -> {
+                String userEmail = emailBox.getText().toString();
 
-                    if (TextUtils.isEmpty(userEmail) || !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
-                        emailBox.setError("Enter a valid email");
-                        return;
-                    }
-
-                    authViewModel.resetPassword(userEmail);
-                    dialog.dismiss();
+                if (TextUtils.isEmpty(userEmail) || !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
+                    emailBox.setError("Enter a valid email");
+                    return;
                 }
+
+                authViewModel.resetPassword(userEmail);
+                dialog.dismiss();
             });
 
-            bindingForgotPassword.dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
+            bindingForgotPassword.dialogButtonCancel.setOnClickListener(v1 -> dialog.dismiss());
 
             if (dialog.getWindow() != null) {
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
@@ -138,48 +127,32 @@ public class SignInFragment extends Fragment {
             dialog.show();
         });
 
-        // Обработка нажатия кнопки входа в аккаунт
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userEmail = signInUserEmail.getText().toString();
-                String userPassword = signInUserPassword.getText().toString();
-                if (checkBox.isChecked()) {
-                    // Если кнопка checkBox активирована, то сохраняются данные, которые были написаны в TextInputEditText
-                    editor.putBoolean("checked", true);
-                    editor.apply();
-                    StoreDataUsingSharedPref(userEmail, userPassword);
+        signInButton.setOnClickListener(v -> {
+            String userEmail = signInUserEmail.getText().toString();
+            String userPassword = signInUserPassword.getText().toString();
 
-                    if (TextUtils.isEmpty(userEmail))
-                        signInUserEmail.setError("Email field cannot be empty!");
-                    else if (TextUtils.isEmpty(userPassword))
-                        signInUserPassword.setError("Password field cannot be empty!");
-                    else {
-                        authViewModel.signIn(userEmail, userPassword);
-                    }
-                }
-                else
-                {
-                    // Если кнопка checkBox не активирована, то данные не сохраняются в полях TextInputEditText
-                    requireContext().getSharedPreferences(FILE_EMAIL, Context.MODE_PRIVATE).edit().clear().apply();
-
-                    if (TextUtils.isEmpty(userEmail))
-                        signInUserEmail.setError("Email field cannot be empty!");
-                    else if (TextUtils.isEmpty(userPassword))
-                        signInUserPassword.setError("Password field cannot be empty!");
-                    else {
-                        authViewModel.signIn(userEmail, userPassword);
-                    }
-                }
+            if (checkBox.isChecked()) {
+                editor.putBoolean("checked", true);
+                editor.apply();
+                StoreDataUsingSharedPref(userEmail, userPassword);
+            } else {
+                requireContext().getSharedPreferences(FILE_EMAIL, Context.MODE_PRIVATE).edit().clear().apply();
             }
+
+            if (TextUtils.isEmpty(userEmail)) {
+                signInUserEmail.setError("Email field cannot be empty!");
+                return;
+            }
+
+            if (TextUtils.isEmpty(userPassword)) {
+                signInUserPassword.setError("Password field cannot be empty!");
+                return;
+            }
+
+            authViewModel.signIn(userEmail, userPassword);
         });
 
-        toSignUpText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_signUpFragment);
-            }
-        });
+        toSignUpText.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_signUpFragment));
     }
 
     private void StoreDataUsingSharedPref(String saveEmail, String savePassword) {
@@ -187,5 +160,11 @@ public class SignInFragment extends Fragment {
         editor.putString("saveEmail", saveEmail);
         editor.putString("savePassword", savePassword);
         editor.apply();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

@@ -3,10 +3,8 @@ package com.example.avanto.ui.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentUris;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,8 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -41,7 +37,6 @@ import com.example.avanto.ui.stateholder.adapter.MusicAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 public class MusicFragment extends Fragment {
@@ -54,7 +49,7 @@ public class MusicFragment extends Fragment {
     final String permission = Manifest.permission.READ_MEDIA_AUDIO;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMusicBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);

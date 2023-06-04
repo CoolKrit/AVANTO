@@ -37,7 +37,7 @@ public class SignUpFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSignUpBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -53,7 +53,6 @@ public class SignUpFragment extends Fragment {
         Button signUpButton = binding.signupButton;
         TextView toSignInText = binding.signupToSignInText;
 
-        // Изменение цвета в тексте только определённого слова
         SpannableString spannableString = new SpannableString(toSignInText.getText().toString());
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.app_selected));
         int start = spannableString.toString().indexOf("Sign In");
@@ -70,30 +69,29 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String userName = signUpUserName.getText().toString();
-                String userPhone = signUpUserPhone.getText().toString();
-                String userEmail = signUpUserEmail.getText().toString();
-                String userPassword = signUpUserPassword.getText().toString();
+        signUpButton.setOnClickListener(v -> {
+            String userName = signUpUserName.getText().toString();
+            String userPhone = signUpUserPhone.getText().toString();
+            String userEmail = signUpUserEmail.getText().toString();
+            String userPassword = signUpUserPassword.getText().toString();
 
-                if (TextUtils.isEmpty(userName))
-                    signUpUserName.setError("Name field cannot be empty!");
-                else if (TextUtils.isEmpty(userEmail))
-                    signUpUserEmail.setError("Email field cannot be empty!");
-                else if (TextUtils.isEmpty(userPassword))
-                    signUpUserPassword.setError("Password field cannot be empty!");
-                else
-                    authViewModel.signUp(userEmail, userPassword, userName, userPhone);
+            if (TextUtils.isEmpty(userName)) {
+                signUpUserName.setError("Name field cannot be empty!");
+            } else if (TextUtils.isEmpty(userEmail)) {
+                signUpUserEmail.setError("Email field cannot be empty!");
+            } else if (TextUtils.isEmpty(userPassword)) {
+                signUpUserPassword.setError("Password field cannot be empty!");
+            } else {
+                authViewModel.signUp(userEmail, userPassword, userName, userPhone);
             }
         });
 
-        toSignInText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment);
-            }
-        });
+        toSignInText.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

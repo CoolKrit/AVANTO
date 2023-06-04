@@ -28,9 +28,17 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private TextView homeTextGreetings;
     private String homeGreetings;
+    private FirebaseUser currentUser;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -41,8 +49,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         homeTextGreetings = binding.homeTextGreetings;
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             showHomeGreetings(currentUser);
         }
@@ -56,11 +62,12 @@ public class HomeFragment extends Fragment {
         referenceProfile.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User userDetails = snapshot.getValue(User.class);
-                if (userDetails != null) {
-                    homeGreetings = userDetails.getUserName();
-
-                    homeTextGreetings.setText("Welcome, " + homeGreetings);
+                if (snapshot.exists()) {
+                    User userDetails = snapshot.getValue(User.class);
+                    if (userDetails != null) {
+                        homeGreetings = userDetails.getUserName();
+                        homeTextGreetings.setText(String.format("Welcome, %s", homeGreetings));
+                    }
                 }
             }
 
@@ -69,5 +76,11 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
