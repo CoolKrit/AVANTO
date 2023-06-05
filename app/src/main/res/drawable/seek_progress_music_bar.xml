@@ -1,0 +1,25 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:gravity="center_vertical">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/app_hint"/>
+            <size android:height="4dp"/>
+            <corners android:radius="5dp"/>
+        </shape>
+
+    </item>
+    <item android:gravity="center_vertical">
+        <scale android:scaleWidth="100%">
+            <selector>
+                <item android:state_enabled="false"
+                    android:drawable="@android:color/transparent"/>
+                <item>
+                    <shape android:shape="rectangle">
+                        <solid android:color="@color/app_selected"/>
+                        <size android:height="4dp"/>
+                        <corners android:radius="5dp"/>
+                    </shape>
+                </item>
+            </selector>
+        </scale>
+    </item>
+</layer-list>

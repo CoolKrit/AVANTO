@@ -6,7 +6,6 @@ import android.content.ContentUris;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +46,7 @@ public class MusicFragment extends Fragment {
     private FragmentMusicBinding binding;
     private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
-    private final List<Music> musicList = new ArrayList<>();
+    private final ArrayList<Music> musicList = new ArrayList<>();
     ActivityResultLauncher<String> storagePermissionLauncher;
     final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
@@ -103,7 +102,7 @@ public class MusicFragment extends Fragment {
     }
 
     private void fetchMusicList() {
-        List<Music> musics = new ArrayList<>();
+        ArrayList<Music> musics = new ArrayList<>();
         Uri mediaStoreUri;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -151,7 +150,7 @@ public class MusicFragment extends Fragment {
         }
     }
 
-    private void showMusicList(List<Music> musics) {
+    private void showMusicList(ArrayList<Music> musics) {
         if (musics.isEmpty()) {
             Toast.makeText(getContext(), "No music", Toast.LENGTH_SHORT).show();
             return;

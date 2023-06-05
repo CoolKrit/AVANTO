@@ -1,25 +1,34 @@
 package com.example.avanto.ui.stateholder.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.avanto.R;
+import com.example.avanto.data.MusicMediaPlayer;
 import com.example.avanto.data.model.Music;
 import com.example.avanto.databinding.ItemMusicBinding;
+import com.example.avanto.ui.fragment.MusicPlayerFragment;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
-    private final List<Music> musicList;
+    private final ArrayList<Music> musicList;
 
-    public MusicAdapter(List<Music> musicList) {
+    public MusicAdapter(ArrayList<Music> musicList) {
         this.musicList = musicList;
     }
 
@@ -31,9 +40,28 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MusicViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MusicViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Music music = musicList.get(position);
         holder.bind(music);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Получите NavController из активности
+                NavController navController = Navigation.findNavController(v);
+
+                MusicMediaPlayer.getInstance().reset();
+                MusicMediaPlayer.currentIndex = position;
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("musicList", musicList);
+                navController.navigate(R.id.musicPlayerFragment, bundle);
+
+                /*// Перейдите к фрагменту AudioPlayerFragment с передачей аргумента аудио URI
+                Bundle bundle = new Bundle();
+                bundle.putString("audioUri", music.getUri().toString());
+                navController.navigate(R.id.musicPlayerFragment, bundle);*/
+            }
+        });
     }
 
     @Override
@@ -68,10 +96,6 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                     Picasso.get().load(R.drawable.defaultuserpic).into(binding.itemMusicLogo);
                 }
             }
-
-            binding.getRoot().setOnClickListener(v -> {
-                Toast.makeText(binding.getRoot().getContext(), music.getTitle(), Toast.LENGTH_SHORT).show();
-            });
         }
     }
 }
