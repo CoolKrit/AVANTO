@@ -1,11 +1,14 @@
 package com.example.avanto.data.model;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class Music {
+public class Music implements Parcelable {
+
     private final String title;
     private final Uri path;
     private final Uri albumPath;
@@ -19,6 +22,26 @@ public class Music {
         this.artist = artist;
         this.duration = duration;
     }
+
+    protected Music(Parcel in) {
+        title = in.readString();
+        path = in.readParcelable(Uri.class.getClassLoader());
+        albumPath = in.readParcelable(Uri.class.getClassLoader());
+        artist = in.readString();
+        duration = in.readInt();
+    }
+
+    public static final Creator<Music> CREATOR = new Creator<Music>() {
+        @Override
+        public Music createFromParcel(Parcel in) {
+            return new Music(in);
+        }
+
+        @Override
+        public Music[] newArray(int size) {
+            return new Music[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -46,5 +69,19 @@ public class Music {
         } else {
             return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeParcelable(path, flags);
+        dest.writeParcelable(albumPath, flags);
+        dest.writeString(artist);
+        dest.writeInt(duration);
     }
 }
