@@ -4,9 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
@@ -21,13 +19,12 @@ import com.example.avanto.databinding.ActivityHomeBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     ActivityResultLauncher<String[]> mPermissionResultLauncher;
-    private boolean isReadPermissionGranted;
+    private boolean isReadMediaAudioPermissionGranted, isReadExternalStoragePermissionGranted;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -37,12 +34,11 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-            isReadPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_AUDIO));
+            isReadMediaAudioPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_AUDIO));
+            isReadExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_EXTERNAL_STORAGE));
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermission();
-        }
+        requestPermission();
     }
 
     @Override
@@ -54,11 +50,18 @@ public class HomeActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void requestPermission() {
-        isReadPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        isReadMediaAudioPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        isReadExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
-        if (!isReadPermissionGranted) {
+        if (!isReadMediaAudioPermissionGranted || !isReadExternalStoragePermissionGranted) {
             List<String> permissionRequest = new ArrayList<>();
-            permissionRequest.add(Manifest.permission.READ_MEDIA_AUDIO);
+
+            if (!isReadMediaAudioPermissionGranted) {
+                permissionRequest.add(Manifest.permission.READ_MEDIA_AUDIO);
+            }
+            if (!isReadExternalStoragePermissionGranted) {
+                permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
             mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
         }
     }
