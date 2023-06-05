@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -46,7 +49,7 @@ public class MusicFragment extends Fragment {
     private MusicAdapter musicAdapter;
     private final List<Music> musicList = new ArrayList<>();
     ActivityResultLauncher<String> storagePermissionLauncher;
-    final String permission = Manifest.permission.READ_MEDIA_AUDIO;
+    final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -170,6 +173,15 @@ public class MusicFragment extends Fragment {
 
         if (searchItem != null) {
             SearchView searchView = (SearchView) searchItem.getActionView();
+            // Получаем иконку поиска
+            ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
+            // Изменяем цвет иконки
+            searchIcon.setColorFilter(getResources().getColor(R.color.app_unselected), PorterDuff.Mode.SRC_IN);
+            // Получаем иконку закрытия
+            ImageView closeIcon = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+            // Изменяем цвет иконки
+            closeIcon.setColorFilter(getResources().getColor(R.color.app_unselected), PorterDuff.Mode.SRC_IN);
+
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {

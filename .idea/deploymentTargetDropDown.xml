@@ -6,12 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\amir-\.android\avd\Samsung_S20_API_33.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="RZ8R200W2SL" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-06-04T20:16:11.792983700Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-06-05T00:02:09.510057Z" />
   </component>
 </project>
