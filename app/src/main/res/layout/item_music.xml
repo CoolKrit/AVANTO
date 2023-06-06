@@ -12,6 +12,7 @@
         android:id="@+id/item_musicCard"
         android:layout_width="0dp"
         android:layout_height="60dp"
+        app:cardBackgroundColor="@color/app_foreground"
         app:cardCornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,29 +20,27 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/app_foreground">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/item_musicLogo"
                 android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="60dp"
+                android:background="@color/app_unselected"
                 android:scaleType="centerCrop"
-                android:src="@drawable/defaultuserpic"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/item_musicTitle"
-                android:layout_width="0dp"
+                android:layout_width="284dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginBottom="8dp"
 
+                android:layout_marginBottom="16dp"
                 android:maxLines="1"
+
                 android:text="Test"
                 android:textSize="16sp"
-
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,11 +52,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="Artist"
+                android:layout_marginBottom="8dp"
                 android:maxLines="1"
+                android:text="Artist"
                 android:textColor="@color/app_hint"
-                android:textSize="12sp"
 
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/item_musicTitle"
                 app:layout_constraintTop_toBottomOf="@+id/item_musicTitle" />
@@ -68,11 +68,12 @@
                 android:layout_height="wrap_content"
 
                 android:layout_marginStart="8dp"
-                android:text="2:15"
+                android:layout_marginBottom="8dp"
                 android:maxLines="1"
+                android:text="2:15"
                 android:textColor="@color/app_hint"
-                android:textSize="12sp"
 
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/item_musicArtist"
                 app:layout_constraintTop_toBottomOf="@+id/item_musicTitle" />

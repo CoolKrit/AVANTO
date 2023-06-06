@@ -5,41 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragment.MusicPlayerFragment"
+    android:background="@color/app_background"
+    android:elevation="100dp"
     android:focusable="true"
     android:clickable="true"
     android:visibility="gone">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/musicplayer_arrowAndOptionsLayout"
+        android:id="@+id/headWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/musicplayer_arrowDown"
+        <ImageView
+            android:id="@+id/playerCloseBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_arrow_down"
             app:tint="@color/app_unselected" />
 
-        <ImageButton
-            android:id="@+id/musicplayer_playerOptions"
+        <ImageView
+            android:id="@+id/playerOptionBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
-            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -48,12 +47,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/musicplayer_imageLayout"
+        android:id="@+id/artworkWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/musicplayer_arrowAndOptionsLayout">
+        app:layout_constraintTop_toBottomOf="@+id/headWrapper">
 
         <androidx.cardview.widget.CardView
             android:layout_width="320dp"
@@ -64,7 +63,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/music_player_albumImage"
+                android:id="@+id/artworkView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/round_imageview"
@@ -81,36 +80,45 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/musicplayer_imageLayout">
+        app:layout_constraintTop_toBottomOf="@+id/artworkWrapper">
 
         <TextView
-            android:id="@+id/musicplayer_musicName"
-            android:layout_width="wrap_content"
+            android:id="@+id/songNameView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:text="SampleSongName"
+            android:layout_marginEnd="30dp"
+            android:ellipsize="marquee"
             android:fontFamily="@font/lexend_semibold"
-
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="SampleSongName"
             android:textSize="24sp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/musicplayer_artistName"
-            android:layout_width="wrap_content"
+            android:id="@+id/songArtistView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
-            android:text="SampleArtistName"
+            android:layout_marginEnd="30dp"
+            android:ellipsize="marquee"
             android:fontFamily="@font/lexend_semibold"
-            android:textSize="18sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="SampleArtistName"
             android:textColor="@color/app_hint"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/musicplayer_musicName" />
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/songNameView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/musicplayer_musicSeekBarLayout"
+        android:id="@+id/seekbarWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -119,7 +127,7 @@
         app:layout_constraintTop_toBottomOf="@+id/musicplayer_nameMusicArtistLayout">
 
         <TextView
-            android:id="@+id/musicplayer_ongoingMusicTime"
+            android:id="@+id/progressView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="43dp"
@@ -127,10 +135,10 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/musicplayer_musicSeekBar" />
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
         <TextView
-            android:id="@+id/musicplayer_remainingMusicTime"
+            android:id="@+id/durationView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="43dp"
@@ -138,10 +146,10 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/musicplayer_musicSeekBar" />
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
         <SeekBar
-            android:id="@+id/musicplayer_musicSeekBar"
+            android:id="@+id/seekbar"
             android:layout_width="0dp"
             android:layout_height="26dp"
             android:layout_marginLeft="30dp"
@@ -157,46 +165,44 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/musicplayer_playerLayout"
+        android:id="@+id/controlWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/musicplayer_musicSeekBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/seekbarWrapper">
 
-        <ImageButton
-            android:id="@+id/musicplayer_playMusicImageButton"
+        <ImageView
+            android:id="@+id/playPauseBtn"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:background="@drawable/ic_play"
+            android:src="@drawable/ic_play"
             android:backgroundTint="@color/app_unselected"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/musicplayer_nextMusicImageButton"
+        <ImageView
+            android:id="@+id/skipNextBtn"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="18dp"
-            android:background="@drawable/ic_next"
-            android:backgroundTint="@color/app_unselected"
+            android:src="@drawable/ic_next"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/musicplayer_playMusicImageButton"
+            app:layout_constraintLeft_toRightOf="@id/playPauseBtn"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/musicplayer_previousMusicImageButton"
+        <ImageView
+            android:id="@+id/skipPreviousBtn"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="18dp"
-            android:background="@drawable/ic_previous"
-            android:backgroundTint="@color/app_unselected"
+            android:src="@drawable/ic_previous"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/musicplayer_playMusicImageButton"
+            app:layout_constraintRight_toLeftOf="@id/playPauseBtn"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

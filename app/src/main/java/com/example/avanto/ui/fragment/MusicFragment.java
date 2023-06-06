@@ -2,13 +2,19 @@ package com.example.avanto.ui.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,8 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -27,18 +36,25 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.avanto.R;
+import com.example.avanto.data.MusicPlayerService;
 import com.example.avanto.data.model.Music;
 import com.example.avanto.databinding.FragmentMusicBinding;
 import com.example.avanto.ui.stateholder.adapter.MusicAdapter;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 public class MusicFragment extends Fragment {
@@ -47,8 +63,21 @@ public class MusicFragment extends Fragment {
     private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
     private final ArrayList<Music> musicList = new ArrayList<>();
-    ActivityResultLauncher<String> storagePermissionLauncher;
-    final String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private ActivityResultLauncher<String> storagePermissionLauncher;
+    final String storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+
+    private ExoPlayer musicPlayer;
+    private ConstraintLayout playerView;
+    private ImageView playerCloseBtn;
+    private TextView songNameView, songArtistView;
+    private ImageView skipPreviousBtn, skipNextBtn, playPauseBtn;
+    private TextView homeSongNameView;
+    private ImageView homeSkipPreviousBtn, homePlayPauseBtn, homeSkipNextBtn;
+    private ConstraintLayout homeControlWrapper;
+    private ImageView artworkView;
+    private SeekBar seekBar;
+    private TextView progressView, durationView;
+    boolean isBound = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -67,8 +96,6 @@ public class MusicFragment extends Fragment {
             Toolbar toolbar = binding.musicToolBar;
             activity.setSupportActionBar(toolbar);
         }
-
-        recyclerView = binding.musicRecyclerView;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             storagePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
                 if (granted) {
@@ -78,20 +105,181 @@ public class MusicFragment extends Fragment {
                 }
             });
 
-            storagePermissionLauncher.launch(permission);
-        } else {
+            storagePermissionLauncher.launch(storagePermission);
+        }
+
+        recyclerView = binding.musicRecyclerView;
+        playerView = view.findViewById(R.id.musicplayer_playerView);
+        playerCloseBtn = view.findViewById(R.id.playerCloseBtn);
+        songNameView = view.findViewById(R.id.songNameView);
+        songArtistView = view.findViewById(R.id.songArtistView);
+
+        skipPreviousBtn = view.findViewById(R.id.skipPreviousBtn);
+        skipNextBtn = view.findViewById(R.id.skipNextBtn);
+        playPauseBtn = view.findViewById(R.id.playPauseBtn);
+
+        homeSongNameView = binding.homeSongNameView;
+        homeSkipPreviousBtn = binding.homeSkipPreviousBtn;
+        homePlayPauseBtn = binding.homePlayPauseBtn;
+        homeSkipNextBtn = binding.homeSkipNextBtn;
+
+        homeControlWrapper = binding.homeControlWrapper;
+
+        artworkView = view.findViewById(R.id.artworkView);
+        seekBar = view.findViewById(R.id.seekbar);
+        progressView = view.findViewById(R.id.progressView);
+        durationView = view.findViewById(R.id.durationView);
+
+        doBindService();
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (playerView.isEnabled())
+                    exitPlayerView();
+            }
+        });
+    }
+
+    private void doBindService() {
+        Intent musicPlayerIntent = new Intent(getContext(), MusicPlayerService.class);
+        requireContext().bindService(musicPlayerIntent, musicPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    ServiceConnection musicPlayerServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicPlayerService.ServiceBinder binder = (MusicPlayerService.ServiceBinder) service;
+            musicPlayer = binder.getMusicPlayerService().musicPlayer;
+            isBound = true;
             fetchMusicList();
+            musicPlayerControls();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    private void musicPlayerControls() {
+        songNameView.setSelected(true);
+        homeSongNameView.setSelected(true);
+
+        playerCloseBtn.setOnClickListener(v -> exitPlayerView());
+        homeControlWrapper.setOnClickListener(v -> showPlayerView());
+
+        musicPlayer.addListener(new Player.Listener() {
+            @Override
+            public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
+                Player.Listener.super.onMediaItemTransition(mediaItem, reason);
+                assert mediaItem != null;
+                setResourceWithMusic();
+                updateMusicPlayerPositionProgress();
+                if (!musicPlayer.isPlaying()) {
+                    musicPlayer.play();
+                }
+            }
+
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                Player.Listener.super.onPlaybackStateChanged(playbackState);
+                if (playbackState == ExoPlayer.STATE_READY) {
+                    setResourceWithMusic();
+                    updateMusicPlayerPositionProgress();
+                }
+                else {
+                    playPauseBtn.setImageResource(R.drawable.ic_play);
+                    homePlayPauseBtn.setImageResource(R.drawable.ic_play);
+                }
+            }
+        });
+
+        skipNextBtn.setOnClickListener(v -> skipToNextSong());
+        homeSkipNextBtn.setOnClickListener(v -> skipToNextSong());
+        skipPreviousBtn.setOnClickListener(v -> skipToPreviousSong());
+        homeSkipPreviousBtn.setOnClickListener(v -> skipToPreviousSong());
+        playPauseBtn.setOnClickListener(v -> playOrPauseMusicPlayer());
+        homePlayPauseBtn.setOnClickListener(v -> playOrPauseMusicPlayer());
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressValue = 0;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressValue = seekBar.getProgress();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (musicPlayer.getPlaybackState() == ExoPlayer.STATE_READY) {
+                    seekBar.setProgress(progressValue);
+                    progressView.setText(Music.formatDuration(progressValue));
+                    musicPlayer.seekTo(progressValue);
+                    musicPlayer.play();
+                }
+            }
+        });
+    }
+
+    private void playOrPauseMusicPlayer() {
+        if (musicPlayer.isPlaying()) {
+            musicPlayer.pause();
+            playPauseBtn.setImageResource(R.drawable.ic_play);
+            homePlayPauseBtn.setImageResource(R.drawable.ic_play);
+        }
+        else {
+            musicPlayer.play();
+            playPauseBtn.setImageResource(R.drawable.ic_pause);
+            homePlayPauseBtn.setImageResource(R.drawable.ic_pause);
         }
     }
 
+    private void skipToPreviousSong() {
+        if (musicPlayer.hasPreviousMediaItem()) {
+            musicPlayer.seekToPrevious();
+        }
+    }
+
+    private void skipToNextSong() {
+        if (musicPlayer.hasNextMediaItem()) {
+            musicPlayer.seekToNext();
+        }
+    }
+
+    private void updateMusicPlayerPositionProgress() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (musicPlayer.isPlaying()) {
+                    progressView.setText(Music.formatDuration((int) musicPlayer.getCurrentPosition()));
+                    seekBar.setProgress((int) musicPlayer.getCurrentPosition());
+                }
+
+                updateMusicPlayerPositionProgress();
+            }
+        }, 1000);
+    }
+
+    private void showPlayerView() {
+        playerView.setVisibility(View.VISIBLE);
+    }
+
+    private void exitPlayerView() {
+        playerView.setVisibility(View.GONE);
+    }
+
     private void userResponses() {
-        if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), storagePermission) == PackageManager.PERMISSION_GRANTED) {
             fetchMusicList();
         } else {
-            if (shouldShowRequestPermissionRationale(permission)) {
+            if (shouldShowRequestPermissionRationale(storagePermission)) {
                 new AlertDialog.Builder(getContext()).setTitle("Request Permission")
                         .setMessage("Allow us to fetch music list on your device")
-                        .setPositiveButton("Allow", (dialog, which) -> storagePermissionLauncher.launch(permission))
+                        .setPositiveButton("Allow", (dialog, which) -> storagePermissionLauncher.launch(storagePermission))
                         .setNegativeButton("Cancel", (dialog, which) -> {
                             Toast.makeText(getContext(), "You denied us to show music list", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
@@ -99,6 +287,28 @@ public class MusicFragment extends Fragment {
                         .show();
             }
         }
+    }
+
+    private void setResourceWithMusic() {
+        Music currentMusic = musicList.get(musicPlayer.getCurrentMediaItemIndex());
+        songNameView.setText(currentMusic.getTitle());
+        songArtistView.setText(currentMusic.getArtist());
+        homeSongNameView.setText(currentMusic.getTitle());
+
+        Uri artworkUri = currentMusic.getAlbumPath();
+        if (artworkUri != null) {
+            Picasso.get().load(artworkUri).into(artworkView);
+            if (artworkView.getDrawable() == null) {
+                artworkView.setImageResource(R.drawable.ic_music);
+            }
+        }
+
+        progressView.setText(Music.formatDuration((int) musicPlayer.getCurrentPosition()));
+        durationView.setText(Music.formatDuration(currentMusic.getDuration()));
+        seekBar.setMax(currentMusic.getDuration());
+        seekBar.setProgress((int) musicPlayer.getCurrentPosition());
+        playPauseBtn.setImageResource(R.drawable.ic_pause);
+        homePlayPauseBtn.setImageResource(R.drawable.ic_pause);
     }
 
     private void fetchMusicList() {
@@ -161,8 +371,9 @@ public class MusicFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        musicAdapter = new MusicAdapter(musics);
+        musicAdapter = new MusicAdapter(getContext(), musics, musicPlayer, playerView);
         recyclerView.setAdapter(musicAdapter);
+        musicAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -172,13 +383,9 @@ public class MusicFragment extends Fragment {
 
         if (searchItem != null) {
             SearchView searchView = (SearchView) searchItem.getActionView();
-            // Получаем иконку поиска
             ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
-            // Изменяем цвет иконки
             searchIcon.setColorFilter(getResources().getColor(R.color.app_unselected), PorterDuff.Mode.SRC_IN);
-            // Получаем иконку закрытия
             ImageView closeIcon = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
-            // Изменяем цвет иконки
             closeIcon.setColorFilter(getResources().getColor(R.color.app_unselected), PorterDuff.Mode.SRC_IN);
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -213,6 +420,15 @@ public class MusicFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        //if (musicPlayer.isPlaying()) musicPlayer.stop();
+        //musicPlayer.release();
+        doUnbindService();
+    }
+
+    private void doUnbindService() {
+        if (isBound) {
+            Objects.requireNonNull(requireContext()).unbindService(musicPlayerServiceConnection);
+            isBound = false;
+        }
     }
 }
