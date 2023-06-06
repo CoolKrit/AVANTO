@@ -28,16 +28,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
-        app:layout_constraintBottom_toTopOf="@+id/music_musicPlayer"
+        app:layout_constraintBottom_toTopOf="@+id/homeControlWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/music_appBar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/music_musicPlayer"
+        android:id="@+id/homeControlWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:background="@drawable/grey_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,8 +56,8 @@
             app:tint="@color/app_unselected" />
 
         <TextView
-            android:id="@+id/music_musicPlayerName"
-            android:layout_width="wrap_content"
+            android:id="@+id/homeSongNameView"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:ellipsize="marquee"
@@ -72,7 +71,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/music_musicPlayerIconPrev"
+            android:id="@+id/homeSkipPreviousBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="10dp"
@@ -80,12 +79,12 @@
             android:layout_marginBottom="10dp"
             android:src="@drawable/ic_previous"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/music_musicPlayerIconPlay"
+            app:layout_constraintEnd_toStartOf="@+id/homePlayPauseBtn"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/app_unselected" />
 
         <ImageView
-            android:id="@+id/music_musicPlayerIconPlay"
+            android:id="@+id/homePlayPauseBtn"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="10dp"
@@ -93,12 +92,12 @@
             android:layout_marginBottom="10dp"
             android:src="@drawable/ic_play"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/music_musicPlayerIconNext"
+            app:layout_constraintEnd_toStartOf="@+id/homeSkipNextBtn"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/app_unselected" />
 
         <ImageView
-            android:id="@+id/music_musicPlayerIconNext"
+            android:id="@+id/homeSkipNextBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="10dp"
@@ -112,6 +111,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Player View -->
-    <include layout="@layout/fragment_music_player" />
+    <include layout="@layout/view_music_player" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

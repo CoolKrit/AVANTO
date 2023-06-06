@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,7 +25,7 @@ public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     ActivityResultLauncher<String[]> mPermissionResultLauncher;
-    private boolean isReadMediaAudioPermissionGranted, isReadExternalStoragePermissionGranted;
+    private boolean isPostNotificationGranted, isReadMediaAudioPermissionGranted, isReadExternalStoragePermissionGranted;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            isPostNotificationGranted = Boolean.TRUE.equals(result.get(Manifest.permission.POST_NOTIFICATIONS));
             isReadMediaAudioPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_AUDIO));
             isReadExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_EXTERNAL_STORAGE));
         });
@@ -50,10 +52,11 @@ public class HomeActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void requestPermission() {
+        isPostNotificationGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
         isReadMediaAudioPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
         isReadExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
-        if (!isReadMediaAudioPermissionGranted || !isReadExternalStoragePermissionGranted) {
+        if (!isReadMediaAudioPermissionGranted || !isReadExternalStoragePermissionGranted || !isPostNotificationGranted) {
             List<String> permissionRequest = new ArrayList<>();
 
             if (!isReadMediaAudioPermissionGranted) {
@@ -61,6 +64,9 @@ public class HomeActivity extends AppCompatActivity {
             }
             if (!isReadExternalStoragePermissionGranted) {
                 permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (!isPostNotificationGranted) {
+                permissionRequest.add(Manifest.permission.POST_NOTIFICATIONS);
             }
             mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
         }
