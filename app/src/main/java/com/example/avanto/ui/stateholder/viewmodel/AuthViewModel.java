@@ -46,13 +46,14 @@ public class AuthViewModel extends ViewModel {
                 });
     }
 
-    public void signUp(String email, String password, String name, String phone) {
+    public void signUp(String email, String password, String name, String phone, String userImage) {
+        long timestamp = System.currentTimeMillis();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         DatabaseReference reference = mDatabase.getReference("Users");
-                        reference.child(currentUser.getUid()).setValue(new User(name, phone));
+                        reference.child(currentUser.getUid()).setValue(new User(name, phone, timestamp, userImage));
                         signUpSuccessLiveData.setValue(true);
                     } else {
                         signUpSuccessLiveData.setValue(false);
