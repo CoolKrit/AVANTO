@@ -30,4 +30,9 @@
         <item name="background">@color/transparent</item>
         <item name="behavior_peekHeight">512dp</item>
     </style>
+
+    <style name="MyRipple">
+        <item name="colorControlHighlight">@color/app_selected</item>
+        <item name="android:background">@color/app_hint</item>
+    </style>
 </resources>

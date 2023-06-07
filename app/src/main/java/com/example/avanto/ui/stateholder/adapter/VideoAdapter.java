@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.avanto.R;
 import com.example.avanto.data.model.Video;
 import com.example.avanto.databinding.ItemVideoBinding;
+import com.example.avanto.ui.activity.VideoPlayerActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyHolder> {
 
-    private ArrayList<Video> videoFolder = new ArrayList<>();
+    public static ArrayList<Video> videoFolder = new ArrayList<>();
     private Context context;
 
     public VideoAdapter(ArrayList<Video> videoFolder, Context context) {
@@ -81,8 +83,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyHolder> {
                 showProperties(position);
             });
         });
-
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VideoPlayerActivity.class);
+                intent.putExtra("p", position);
+                context.startActivity(intent);
+            }
+        });
     }
 
     private void shareFile(int position) {
@@ -110,7 +118,11 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyHolder> {
                         Uri contentUri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                                 Long.parseLong(videoFolder.get(position).getId()));
                         File file = new File(videoFolder.get(position).getPath());
-                        boolean deleted = file.delete();
+                        Log.e("File", file.toString());
+                        boolean deleted = false;
+                        if (file.exists())
+                           deleted = file.delete();
+                        Log.e("File", String.valueOf(deleted));
                         if (deleted) {
                             context.getApplicationContext().getContentResolver().delete(contentUri, null, null);
                             videoFolder.remove(position);
