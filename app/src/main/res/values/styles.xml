@@ -21,4 +21,13 @@
         <item name="android:textColorHint">@color/app_hint</item>
         <item name="hintTextColor">?attr/colorPrimary</item>
     </style>
+
+    <!-- BottomSheetDialog -->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+    <style name="BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="background">@color/transparent</item>
+        <item name="behavior_peekHeight">512dp</item>
+    </style>
 </resources>
