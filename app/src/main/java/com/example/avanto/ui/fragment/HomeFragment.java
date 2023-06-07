@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.avanto.R;
 import com.example.avanto.data.model.User;
 import com.example.avanto.data.model.Video;
 import com.example.avanto.databinding.FragmentHomeBinding;

@@ -1,13 +1,10 @@
 package com.example.avanto.ui.fragment;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -15,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,15 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -39,7 +32,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,8 +44,6 @@ import com.example.avanto.ui.stateholder.adapter.MusicAdapter;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -67,14 +57,12 @@ public class MusicFragment extends Fragment {
     private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
     private final ArrayList<Music> musicList = new ArrayList<>();
-    //private ActivityResultLauncher<String> storagePermissionLauncher;
-    //final String storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
     private ExoPlayer musicPlayer;
     private ConstraintLayout playerView;
     private ImageView playerCloseBtn;
     private TextView songNameView, songArtistView, homeSongNameView;
-    private ImageView skipPreviousBtn, skipNextBtn, playPauseBtn, homeSkipPreviousBtn, homePlayPauseBtn, homeSkipNextBtn, artworkView;
+    private ImageView skipPreviousBtn, skipNextBtn, playPauseBtn, homeSkipPreviousBtn, homePlayPauseBtn, homeSkipNextBtn, artworkView, homeSongAlbunView;
     private ConstraintLayout homeControlWrapper;
     private SeekBar seekBar;
     private TextView progressView, durationView;
@@ -85,29 +73,20 @@ public class MusicFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentMusicBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
+        Toast.makeText(getContext(), "onCreate", Toast.LENGTH_SHORT).show();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Toast.makeText(getContext(), "onCreated", Toast.LENGTH_SHORT).show();
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
             Toolbar toolbar = binding.musicToolBar;
             activity.setSupportActionBar(toolbar);
         }
-        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            storagePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
-                if (granted) {
-                    fetchMusicList();
-                } else {
-                    userResponses();
-                }
-            });
-
-            storagePermissionLauncher.launch(storagePermission);
-        }*/
 
         recyclerView = binding.musicRecyclerView;
         playerView = view.findViewById(R.id.musicplayer_playerView);
@@ -120,6 +99,7 @@ public class MusicFragment extends Fragment {
         playPauseBtn = view.findViewById(R.id.playPauseBtn);
 
         homeSongNameView = binding.homeSongNameView;
+        homeSongAlbunView = binding.musicMusicPlayerIcon;
         homeSkipPreviousBtn = binding.homeSkipPreviousBtn;
         homePlayPauseBtn = binding.homePlayPauseBtn;
         homeSkipNextBtn = binding.homeSkipNextBtn;
@@ -273,23 +253,6 @@ public class MusicFragment extends Fragment {
         playerView.setVisibility(View.GONE);
     }
 
-    /*private void userResponses() {
-        if (ContextCompat.checkSelfPermission(requireContext(), storagePermission) == PackageManager.PERMISSION_GRANTED) {
-            fetchMusicList();
-        } else {
-            if (shouldShowRequestPermissionRationale(storagePermission)) {
-                new AlertDialog.Builder(getContext()).setTitle("Request Permission")
-                        .setMessage("Allow us to fetch music list on your device")
-                        .setPositiveButton("Allow", (dialog, which) -> storagePermissionLauncher.launch(storagePermission))
-                        .setNegativeButton("Cancel", (dialog, which) -> {
-                            Toast.makeText(getContext(), "You denied us to show music list", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        })
-                        .show();
-            }
-        }
-    }*/
-
     private void setResourceWithMusic() {
         Music currentMusic = musicList.get(musicPlayer.getCurrentMediaItemIndex());
         songNameView.setText(currentMusic.getTitle());
@@ -299,8 +262,10 @@ public class MusicFragment extends Fragment {
         Uri artworkUri = currentMusic.getAlbumPath();
         if (artworkUri != null) {
             Picasso.get().load(artworkUri).into(artworkView);
+            Picasso.get().load(artworkUri).into(homeSongAlbunView);
             if (artworkView.getDrawable() == null) {
                 artworkView.setImageResource(R.drawable.ic_music);
+                homeSongAlbunView.setImageResource(R.drawable.ic_music);
             }
         }
 
@@ -421,8 +386,6 @@ public class MusicFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (musicPlayer.isPlaying()) musicPlayer.stop();
-        musicPlayer.release();
         doUnbindService();
     }
 

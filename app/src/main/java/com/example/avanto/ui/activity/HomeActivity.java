@@ -26,7 +26,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
     private ActivityResultLauncher<String[]> mPermissionResultLauncher;
-    public boolean isPostNotificationGranted, isReadMediaAudioPermissionGranted, isReadMediaVideoPermissionGranted, isReadExternalStoragePermissionGranted, isWriteExternalStoragePermissionGranted;
+    public boolean isPostNotificationGranted, isReadMediaAudioPermissionGranted, isReadMediaVideoPermissionGranted, isManageExternalStoragePermissionGranted, isReadExternalStoragePermissionGranted, isWriteExternalStoragePermissionGranted;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -41,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
             isReadMediaVideoPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_VIDEO));
             isReadExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_EXTERNAL_STORAGE));
             isWriteExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+            isManageExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.MANAGE_EXTERNAL_STORAGE));
         });
 
         requestPermission();
@@ -60,8 +61,9 @@ public class HomeActivity extends AppCompatActivity {
         isReadMediaVideoPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED;
         isReadExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         isWriteExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        isManageExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
-        if (!isReadMediaAudioPermissionGranted || !isReadExternalStoragePermissionGranted || !isPostNotificationGranted || !isWriteExternalStoragePermissionGranted) {
+        if (!isReadMediaAudioPermissionGranted || !isReadMediaVideoPermissionGranted || !isManageExternalStoragePermissionGranted || !isReadExternalStoragePermissionGranted || !isWriteExternalStoragePermissionGranted || !isPostNotificationGranted) {
             List<String> permissionRequest = new ArrayList<>();
 
             if (!isReadMediaAudioPermissionGranted) {
@@ -75,6 +77,9 @@ public class HomeActivity extends AppCompatActivity {
             }
             if (!isWriteExternalStoragePermissionGranted) {
                 permissionRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!isManageExternalStoragePermissionGranted) {
+                permissionRequest.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE);
             }
             if (!isPostNotificationGranted) {
                 permissionRequest.add(Manifest.permission.POST_NOTIFICATIONS);

@@ -112,4 +112,9 @@ public class VideoFolderActivity extends AppCompatActivity {
         }
         return VideoFiles;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
