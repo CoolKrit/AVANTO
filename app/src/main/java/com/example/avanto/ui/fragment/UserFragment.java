@@ -38,6 +38,7 @@ public class UserFragment extends Fragment {
 
     private FragmentUserBinding binding;
     private FirebaseAuth mAuth;
+    private Button signOut;
     private static final String TAG = "PROFILE_TAG";
 
     @Override
@@ -51,6 +52,7 @@ public class UserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+        signOut = binding.userButtonUserSignOut;
         loadUserInfo();
 
         binding.profileEditBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +83,12 @@ public class UserFragment extends Fragment {
 
             userTextEmail.setText(currentUser.getEmail());
             userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), this::updateUserDetails);
-        }
+        }*/
 
         signOut.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SignActivity.class);
             startActivity(intent);
-        });*/
+        });
     }
 
     private void loadUserInfo() {
