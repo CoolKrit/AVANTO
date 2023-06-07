@@ -183,6 +183,18 @@
         android:textColor="@color/app_unselected"
         android:textStyle="bold"/>
 
+    <Button
+        android:id="@+id/user_buttonUserSignOut"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/favoriteBooksLabelTv"
+        android:text="@string/signout"
+        app:cornerRadius="15dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp" />
+
+
     <!--<androidx.recyclerview.widget.RecyclerView
         android:id="@+id/booksRv"
         android:layout_width="match_parent"
