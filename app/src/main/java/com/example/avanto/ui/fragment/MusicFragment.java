@@ -73,14 +73,12 @@ public class MusicFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentMusicBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
-        Toast.makeText(getContext(), "onCreate", Toast.LENGTH_SHORT).show();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toast.makeText(getContext(), "onCreated", Toast.LENGTH_SHORT).show();
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
