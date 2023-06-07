@@ -16,6 +16,7 @@
     <color name="app_unselected">#EEEEEE</color>
     <color name="app_hint">#8A8A8A</color>
 
+    <color name="transparent">#00000000</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/app_unselected</color>
 
 </resources>
