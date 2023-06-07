@@ -1,10 +1,12 @@
 package com.example.avanto.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avanto.data.model.User;
+import com.example.avanto.data.model.Video;
 import com.example.avanto.databinding.FragmentHomeBinding;
+import com.example.avanto.ui.stateholder.adapter.FolderAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 public class HomeFragment extends Fragment {
 
@@ -29,6 +35,11 @@ public class HomeFragment extends Fragment {
     private TextView homeTextGreetings;
     private String homeGreetings;
     private FirebaseUser currentUser;
+
+    /*private ArrayList<String> folderList = new ArrayList<>();
+    private ArrayList<Video> videoList = new ArrayList<>();
+    FolderAdapter folderAdapter;
+    RecyclerView recyclerView;*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

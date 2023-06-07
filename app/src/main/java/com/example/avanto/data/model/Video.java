@@ -1,24 +1,40 @@
 package com.example.avanto.data.model;
 
 public class Video {
-    private int img;
+    private String id;
+    private String path;
     private String title;
-    private String filePath;
-    private int duration;
+    private String size;
+    private String resolution;
+    private String duration;
+    private String displayName;
+    private String wh;
 
-    public Video(int img, String title, String filePath, int duration) {
-        this.img = img;
+    public Video(String id, String path, String title, String size, String resolution, String duration, String displayName, String wh) {
+        this.id = id;
+        this.path = path;
         this.title = title;
-        this.filePath = filePath;
+        this.size = size;
+        this.resolution = resolution;
         this.duration = duration;
+        this.displayName = displayName;
+        this.wh = wh;
     }
 
-    public int getImg() {
-        return img;
+    public String getId() {
+        return id;
     }
 
-    public void setImg(int img) {
-        this.img = img;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getTitle() {
@@ -29,19 +45,43 @@ public class Video {
         this.title = title;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getSize() {
+        return size;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setSize(String size) {
+        this.size = size;
     }
 
-    public int getDuration() {
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getWh() {
+        return wh;
+    }
+
+    public void setWh(String wh) {
+        this.wh = wh;
     }
 }

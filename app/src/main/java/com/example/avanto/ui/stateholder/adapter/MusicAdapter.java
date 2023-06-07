@@ -4,21 +4,16 @@ package com.example.avanto.ui.stateholder.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.avanto.R;
-import com.example.avanto.data.MusicMediaPlayer;
 import com.example.avanto.data.MusicPlayerService;
 import com.example.avanto.data.model.Music;
 import com.example.avanto.databinding.ItemMusicBinding;

@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -50,6 +52,8 @@ import com.example.avanto.ui.stateholder.adapter.MusicAdapter;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -63,18 +67,15 @@ public class MusicFragment extends Fragment {
     private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
     private final ArrayList<Music> musicList = new ArrayList<>();
-    private ActivityResultLauncher<String> storagePermissionLauncher;
-    final String storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+    //private ActivityResultLauncher<String> storagePermissionLauncher;
+    //final String storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
     private ExoPlayer musicPlayer;
     private ConstraintLayout playerView;
     private ImageView playerCloseBtn;
-    private TextView songNameView, songArtistView;
-    private ImageView skipPreviousBtn, skipNextBtn, playPauseBtn;
-    private TextView homeSongNameView;
-    private ImageView homeSkipPreviousBtn, homePlayPauseBtn, homeSkipNextBtn;
+    private TextView songNameView, songArtistView, homeSongNameView;
+    private ImageView skipPreviousBtn, skipNextBtn, playPauseBtn, homeSkipPreviousBtn, homePlayPauseBtn, homeSkipNextBtn, artworkView;
     private ConstraintLayout homeControlWrapper;
-    private ImageView artworkView;
     private SeekBar seekBar;
     private TextView progressView, durationView;
     boolean isBound = false;
@@ -96,7 +97,7 @@ public class MusicFragment extends Fragment {
             Toolbar toolbar = binding.musicToolBar;
             activity.setSupportActionBar(toolbar);
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             storagePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
                 if (granted) {
                     fetchMusicList();
@@ -106,7 +107,7 @@ public class MusicFragment extends Fragment {
             });
 
             storagePermissionLauncher.launch(storagePermission);
-        }
+        }*/
 
         recyclerView = binding.musicRecyclerView;
         playerView = view.findViewById(R.id.musicplayer_playerView);
@@ -261,7 +262,7 @@ public class MusicFragment extends Fragment {
 
                 updateMusicPlayerPositionProgress();
             }
-        }, 1000);
+        }, 250);
     }
 
     private void showPlayerView() {
@@ -272,7 +273,7 @@ public class MusicFragment extends Fragment {
         playerView.setVisibility(View.GONE);
     }
 
-    private void userResponses() {
+    /*private void userResponses() {
         if (ContextCompat.checkSelfPermission(requireContext(), storagePermission) == PackageManager.PERMISSION_GRANTED) {
             fetchMusicList();
         } else {
@@ -287,7 +288,7 @@ public class MusicFragment extends Fragment {
                         .show();
             }
         }
-    }
+    }*/
 
     private void setResourceWithMusic() {
         Music currentMusic = musicList.get(musicPlayer.getCurrentMediaItemIndex());
@@ -420,8 +421,8 @@ public class MusicFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //if (musicPlayer.isPlaying()) musicPlayer.stop();
-        //musicPlayer.release();
+        if (musicPlayer.isPlaying()) musicPlayer.stop();
+        musicPlayer.release();
         doUnbindService();
     }
 
