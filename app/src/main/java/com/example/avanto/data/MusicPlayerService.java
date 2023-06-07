@@ -129,7 +129,7 @@ public class MusicPlayerService extends Service {
             view.setImageURI(Objects.requireNonNull(musicPlayer.getCurrentMediaItem()).mediaMetadata.artworkUri);
             BitmapDrawable bitmapDrawable = (BitmapDrawable) view.getDrawable();
             if (bitmapDrawable == null) {
-                bitmapDrawable = (BitmapDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.defaultuserpic);
+                bitmapDrawable = (BitmapDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.avantoapppic);
             }
             assert bitmapDrawable != null;
             return bitmapDrawable.getBitmap();

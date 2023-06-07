@@ -17,15 +17,16 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.avanto.R;
 import com.example.avanto.databinding.ActivityHomeBinding;
+import com.example.avanto.ui.fragment.VideoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    ActivityHomeBinding binding;
-    ActivityResultLauncher<String[]> mPermissionResultLauncher;
-    private boolean isPostNotificationGranted, isReadMediaAudioPermissionGranted, isReadExternalStoragePermissionGranted;
+    private ActivityHomeBinding binding;
+    private ActivityResultLauncher<String[]> mPermissionResultLauncher;
+    public boolean isPostNotificationGranted, isReadMediaAudioPermissionGranted, isReadMediaVideoPermissionGranted, isReadExternalStoragePermissionGranted, isWriteExternalStoragePermissionGranted;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -37,7 +38,9 @@ public class HomeActivity extends AppCompatActivity {
         mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
             isPostNotificationGranted = Boolean.TRUE.equals(result.get(Manifest.permission.POST_NOTIFICATIONS));
             isReadMediaAudioPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_AUDIO));
+            isReadMediaVideoPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_MEDIA_VIDEO));
             isReadExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_EXTERNAL_STORAGE));
+            isWriteExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE));
         });
 
         requestPermission();
@@ -54,16 +57,24 @@ public class HomeActivity extends AppCompatActivity {
     private void requestPermission() {
         isPostNotificationGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
         isReadMediaAudioPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        isReadMediaVideoPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED;
         isReadExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        isWriteExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
-        if (!isReadMediaAudioPermissionGranted || !isReadExternalStoragePermissionGranted || !isPostNotificationGranted) {
+        if (!isReadMediaAudioPermissionGranted || !isReadExternalStoragePermissionGranted || !isPostNotificationGranted || !isWriteExternalStoragePermissionGranted) {
             List<String> permissionRequest = new ArrayList<>();
 
             if (!isReadMediaAudioPermissionGranted) {
                 permissionRequest.add(Manifest.permission.READ_MEDIA_AUDIO);
             }
+            if (!isReadMediaVideoPermissionGranted) {
+                permissionRequest.add(Manifest.permission.READ_MEDIA_VIDEO);
+            }
             if (!isReadExternalStoragePermissionGranted) {
                 permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (!isWriteExternalStoragePermissionGranted) {
+                permissionRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             if (!isPostNotificationGranted) {
                 permissionRequest.add(Manifest.permission.POST_NOTIFICATIONS);
