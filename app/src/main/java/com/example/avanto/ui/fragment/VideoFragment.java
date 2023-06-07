@@ -52,7 +52,6 @@ public class VideoFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(requireActivity()).getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         || ContextCompat.checkSelfPermission(Objects.requireNonNull(requireActivity()).getApplicationContext(), Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED) {
             videoList = getAllVideos(Objects.requireNonNull(requireContext()));
-            Toast.makeText(getContext(), "HERE!", Toast.LENGTH_SHORT).show();
         }
         recyclerView = binding.videoFoldersRV;
         if (folderList != null && folderList.size() > 0 && videoList != null) {
