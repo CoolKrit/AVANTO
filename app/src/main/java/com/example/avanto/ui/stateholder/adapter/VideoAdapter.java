@@ -1,5 +1,6 @@
 package com.example.avanto.ui.stateholder.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentUris;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.avanto.R;
+import com.example.avanto.data.model.Music;
 import com.example.avanto.data.model.Video;
 import com.example.avanto.databinding.ItemVideoBinding;
 import com.example.avanto.ui.activity.VideoPlayerActivity;
@@ -33,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyHolder> {
 
@@ -52,7 +55,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.title.setText(videoFolder.get(position).getTitle());
         Glide.with(context).load(videoFolder.get(position).getPath()).into(holder.thumbnail);
         holder.duration.setText(videoFolder.get(position).getDuration());
@@ -202,6 +205,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyHolder> {
     @Override
     public int getItemCount() {
         return videoFolder.size();
+    }
+
+    public void updateSearchList(ArrayList<Video> searchList) {
+        videoFolder = new ArrayList<>();
+        videoFolder.addAll(searchList);
+        notifyDataSetChanged();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
