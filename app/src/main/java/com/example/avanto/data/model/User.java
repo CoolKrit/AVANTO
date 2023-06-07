@@ -5,10 +5,14 @@ public class User {
     private String userEmail;
     private String userPhoneNumber;
     private String userPassword;
+    private long timestamp;
+    private String userImage;
 
-    public User(String username, String phonenumber) {
+    public User(String username, String phonenumber, long timestamp, String userImage) {
         this.userName = username;
         this.userPhoneNumber = phonenumber;
+        this.timestamp = timestamp;
+        this.userImage = userImage;
     }
 
     public User() {}
@@ -44,4 +48,6 @@ public class User {
     public String getPassword() {
         return userPassword;
     }
+    public long getTimestamp() {return timestamp;}
+    public String getUserImage() {return userImage;}
 }

@@ -74,6 +74,7 @@ public class SignUpFragment extends Fragment {
             String userPhone = signUpUserPhone.getText().toString();
             String userEmail = signUpUserEmail.getText().toString();
             String userPassword = signUpUserPassword.getText().toString();
+            String userImage = " ";
 
             if (TextUtils.isEmpty(userName)) {
                 signUpUserName.setError("Name field cannot be empty!");
@@ -82,7 +83,7 @@ public class SignUpFragment extends Fragment {
             } else if (TextUtils.isEmpty(userPassword)) {
                 signUpUserPassword.setError("Password field cannot be empty!");
             } else {
-                authViewModel.signUp(userEmail, userPassword, userName, userPhone);
+                authViewModel.signUp(userEmail, userPassword, userName, userPhone, userImage);
             }
         });
 
