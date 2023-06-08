@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -43,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
             isWriteExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE));
             isManageExternalStoragePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.MANAGE_EXTERNAL_STORAGE));
         });
+        Log.e("WS", String.valueOf(isWriteExternalStoragePermissionGranted));
 
         requestPermission();
     }
